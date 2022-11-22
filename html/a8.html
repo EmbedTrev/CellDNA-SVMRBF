@@ -1,0 +1,224 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Trevor Tracy</title><meta name="generator" content="MATLAB 9.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-11-22"><meta name="DC.source" content="a8.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Trevor Tracy</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">a8.m</a></li></ul></div><h2 id="1">a8.m</h2><pre class="codeinput"><span class="keyword">function</span> a8
+clear <span class="string">all</span>, close <span class="string">all</span> <span class="string">hidden</span>
+
+<span class="comment">% Load the csv file</span>
+cd = readtable(<span class="string">'ML_HW_Data_CellDNA.csv'</span>);
+
+<span class="comment">% Convert dependent variable to binary</span>
+Y = cd(:,[14]);
+tempTable = table2array(Y);
+tempTable(tempTable~=0)=1;
+Y = array2table(tempTable);
+
+<span class="comment">% Run zscores on numerical values: columns 1-13 [0-12]</span>
+<span class="comment">% Make array (to perform zscore), then revert data to table again</span>
+cdReg = cd;
+cdReg(:, [1 2 3 4 5 6 7 8 9 10 11 12 13]) = <span class="keyword">...</span>
+    array2table(zscore(table2array(cd(:, [1 2 3 4 5 6 7 8 9 10 11 12 13]))));
+cdReg(:, 14) = Y;
+
+<span class="comment">% Put Data in X and Y</span>
+<span class="comment">%X = cdReg(:, [1 2 3 4 5 6 7 8 9 10 11 12 13]); % option 0 for all data</span>
+X = cdReg(:, [5 4]); <span class="comment">% option for visual boundary</span>
+X = table2array(X);
+Y = table2array(Y);
+
+<span class="comment">% Setup SVM Inputs</span>
+ContraintBox = 1;
+
+<span class="comment">% Build RBF SVM</span>
+RBF_SVM = fitcsvm(X, Y, <span class="string">'BoxConstraint'</span>, ContraintBox, <span class="string">'KernelFunction'</span>, <span class="string">'RBF'</span>, <span class="string">'KernelScale'</span>, 1);
+
+<span class="comment">% Prepare Grid for Plotting</span>
+gap = 0.01;
+[x1Grid,x2Grid] = meshgrid(min(X(:,1)) : gap : max(X(:,1)), min(X(:,2)) : gap : max(X(:,2)));
+xGrid = [x1Grid(:),x2Grid(:)];
+
+<span class="comment">% Reformat X and Y</span>
+x_cell = num2cell(X);
+y_cell = num2cell(Y);
+
+<span class="comment">% Plot RBF SVM</span>
+Plot2DDecisionBoundary(RBF_SVM, X, Y, xGrid, <span class="string">'RBF SVM'</span>)
+
+<span class="comment">% Get Accuracy, Precision, and Recall for Each Class</span>
+[predictClasses,proba] = predict(RBF_SVM, X);
+CFM_Stats(Y, predictClasses)
+
+<span class="comment">% 5. Roc Curves</span>
+[xpos, ypos, T, AUC0] = perfcurve(Y, proba(:, 1), 0);
+figure, plot(xpos, ypos)
+xlim([-0.05 1.05]), ylim([-0.05 1.05]), xlabel(<span class="string">'\bf FP rate'</span>),  ylabel(<span class="string">'\bf TP rate'</span>)
+title(<span class="string">'\bf ROC for class 0'</span>)
+[xpos, ypos, T, AUC1] = perfcurve(Y, proba(:, 2), 1);
+figure, plot(xpos, ypos)
+xlim([-0.05 1.05]), ylim([-0.05 1.05]), xlabel(<span class="string">'\bf FP rate'</span>),  ylabel(<span class="string">'\bf TP rate'</span>)
+title(<span class="string">'\bf ROC for class 1'</span>)
+
+<span class="keyword">return</span>;
+
+<span class="keyword">function</span> Plot2DDecisionBoundary(model, X, Y, gridIn, plotTitle)
+[yh, ~] = predict(model, gridIn);
+gscatter(gridIn(:,1), gridIn(:,2), yh, <span class="string">'cg'</span>), hold <span class="string">on</span>,
+gscatter(X(:,1), X(:,2), Y, <span class="string">'rb'</span>, <span class="string">'.'</span>, 10);
+title([<span class="string">'\bf'</span> plotTitle])
+axis <span class="string">tight</span>, drawnow
+</pre><pre class="codeoutput">Confusion Matrix:
+   973    44
+    55   145
+
+Overall accuracy = 0.91865
+
+ans =
+
+  2&times;6 table
+
+    accuracy    precision    recall     Fscore     sensitivity    specificity
+    ________    _________    _______    _______    ___________    ___________
+
+    0.91865      0.9465      0.95674    0.95159      0.95674          0.725  
+    0.91865      0.7672        0.725     0.7455        0.725        0.95674  
+
+</pre><img vspace="5" hspace="5" src="a8_01.png" alt=""> <img vspace="5" hspace="5" src="a8_02.png" alt=""> <img vspace="5" hspace="5" src="a8_03.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2022b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Trevor Tracy
+%% a8.m
+function a8
+clear all, close all hidden
+
+% Load the csv file
+cd = readtable('ML_HW_Data_CellDNA.csv');
+
+% Convert dependent variable to binary
+Y = cd(:,[14]);
+tempTable = table2array(Y);
+tempTable(tempTable~=0)=1;
+Y = array2table(tempTable);
+
+% Run zscores on numerical values: columns 1-13 [0-12]
+% Make array (to perform zscore), then revert data to table again
+cdReg = cd;
+cdReg(:, [1 2 3 4 5 6 7 8 9 10 11 12 13]) = ...
+    array2table(zscore(table2array(cd(:, [1 2 3 4 5 6 7 8 9 10 11 12 13]))));
+cdReg(:, 14) = Y;
+
+% Put Data in X and Y
+%X = cdReg(:, [1 2 3 4 5 6 7 8 9 10 11 12 13]); % option 0 for all data
+X = cdReg(:, [5 4]); % option for visual boundary
+X = table2array(X);
+Y = table2array(Y);
+
+% Setup SVM Inputs
+ContraintBox = 1;
+
+% Build RBF SVM
+RBF_SVM = fitcsvm(X, Y, 'BoxConstraint', ContraintBox, 'KernelFunction', 'RBF', 'KernelScale', 1);
+
+% Prepare Grid for Plotting
+gap = 0.01;
+[x1Grid,x2Grid] = meshgrid(min(X(:,1)) : gap : max(X(:,1)), min(X(:,2)) : gap : max(X(:,2)));
+xGrid = [x1Grid(:),x2Grid(:)];
+
+% Reformat X and Y
+x_cell = num2cell(X);
+y_cell = num2cell(Y);
+
+% Plot RBF SVM
+Plot2DDecisionBoundary(RBF_SVM, X, Y, xGrid, 'RBF SVM')
+
+% Get Accuracy, Precision, and Recall for Each Class
+[predictClasses,proba] = predict(RBF_SVM, X);
+CFM_Stats(Y, predictClasses)
+
+% 5. Roc Curves
+[xpos, ypos, T, AUC0] = perfcurve(Y, proba(:, 1), 0);
+figure, plot(xpos, ypos)
+xlim([-0.05 1.05]), ylim([-0.05 1.05]), xlabel('\bf FP rate'),  ylabel('\bf TP rate')
+title('\bf ROC for class 0')
+[xpos, ypos, T, AUC1] = perfcurve(Y, proba(:, 2), 1);
+figure, plot(xpos, ypos)
+xlim([-0.05 1.05]), ylim([-0.05 1.05]), xlabel('\bf FP rate'),  ylabel('\bf TP rate')
+title('\bf ROC for class 1')
+
+return;
+              
+function Plot2DDecisionBoundary(model, X, Y, gridIn, plotTitle)
+[yh, ~] = predict(model, gridIn);
+gscatter(gridIn(:,1), gridIn(:,2), yh, 'cg'), hold on,
+gscatter(X(:,1), X(:,2), Y, 'rb', '.', 10);
+title(['\bf' plotTitle])
+axis tight, drawnow
+
+
+
+##### SOURCE END #####
+--></body></html>
